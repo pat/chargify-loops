@@ -2,6 +2,9 @@ class Chargify::HooksController < ActionController::Base
   before_filter :verify_signature
 
   def create
+    Chargify::Loops.delegate_hook params[:event].to_sym,
+      params[:payload].symbolize_keys
+
     head :ok
   end
 

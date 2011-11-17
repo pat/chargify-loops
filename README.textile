@@ -1,0 +1,42 @@
+h1. Chargify Loops
+
+Chargify Loops is a Rails engine that handles Chargify's Web Hooks. All you need to do is pair hooks to loops for any particular events you care about, and this engine handles everything else.
+
+This is for Rails 3 only - though developers using Rails 2 are welcome to pick things out of the source for their apps.
+
+h2. Installation and Usage
+
+Add the following to your Gemfile:
+
+<pre><code>gem 'chargify-loops', '~> 0.1.0'</code></pre>
+
+Then add an initializer for your loops, and provide your shared key:
+
+<pre><code># config/initializers/chargify_loops.rb
+Chargify::Loops.shared_key = 'secret-key-from-chargify'
+
+Chargify::Loops.loop! :signup_success do |payload|
+  Emails.welcome(payload[:subscription][:customer][:email]).deliver
+end
+
+Chargify::Loops.loop! :payment_failure do |payload|
+  Banker.loan payload[:payment][:amount_in_cents]
+end</code></pre>
+
+If a web hook is invalid, it'll never hit your loops - so you're only dealing with valid hook requests.
+
+Also: it's best to keep your loops short and sweet - don't put business logic in your initializer, but somewhere else where you've got some test coverage. As a rule of thumb, if you've got more than one line inside a loop block, then you should probably consider whether that code could be somewhere else.
+
+Finally, make sure Chargify is set up to send its hooks your way. This library adds a route that accepts POST requests to @/chargify/hooks@ - so if your site is @www.example.com@, then you'll want to tell Chargify to send hooks to @http://www.example.com/chargify/hooks@.
+
+h2. Contributing
+
+Contributions are very much welcome - but keep in mind the following:
+
+* Keep patches in a separate branch.
+* Write tests for your patches.
+* Don't mess with the version or history file. I'll take care of that when the patch is merged in.
+
+h2. Credits
+
+Copyright (c) 2011, Chargify Loops is developed and maintained by Pat Allan, and is released under the open MIT Licence.

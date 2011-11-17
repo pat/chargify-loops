@@ -24,11 +24,23 @@ describe Chargify::HooksController do
     end
 
     context 'valid signatures' do
+      before :each do
+        Chargify::Loops.stub :delegate_hook => true
+      end
+
       it "responds with a 200 OK code" do
         post_with_signature :create, :payload => {:chargify => 'testing'},
           :event => 'test'
 
         response.code.to_i.should == 200
+      end
+
+      it "delegates the hook to the appropriate loops" do
+        Chargify::Loops.should_receive(:delegate_hook).
+          with(:test, {:chargify => 'testing'})
+
+        post_with_signature :create, :payload => {:chargify => 'testing'},
+          :event => 'test'
       end
     end
   end
