@@ -3,7 +3,7 @@ class Chargify::HooksController < ActionController::Base
 
   def create
     Chargify::Loops.delegate_hook params[:event].to_sym,
-      params[:payload].symbolize_keys
+      params[:payload].stringify_keys!
 
     head :ok
   end

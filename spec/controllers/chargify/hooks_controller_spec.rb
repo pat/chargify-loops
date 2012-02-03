@@ -37,7 +37,7 @@ describe Chargify::HooksController do
 
       it "delegates the hook to the appropriate loops" do
         Chargify::Loops.should_receive(:delegate_hook).
-          with(:test, {:chargify => 'testing'})
+          with(:test, {'chargify' => 'testing'})
 
         post_with_signature :create, :payload => {:chargify => 'testing'},
           :event => 'test'

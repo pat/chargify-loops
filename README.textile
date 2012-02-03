@@ -16,14 +16,14 @@ Then add an initializer for your loops, and provide your shared key:
 Chargify::Loops.shared_key = 'secret-key-from-chargify'
 
 Chargify::Loops.loop! :signup_success do |payload|
-  Emails.welcome(payload[:subscription][:customer][:email]).deliver
+  Emails.welcome(payload['subscription']['customer']['email']).deliver
 end
 
 Chargify::Loops.loop! :payment_failure do |payload|
-  Banker.loan payload[:payment][:amount_in_cents]
+  Banker.loan payload['payment']['amount_in_cents']
 end</code></pre>
 
-If a web hook is invalid, it'll never hit your loops - so you're only dealing with valid hook requests.
+If a web hook is invalid, it'll never hit your loops - so you're only dealing with valid hook requests. All hash keys will be strings (I normally prefer symbols, but hashes within hashes had string keys, so opting with that as a default).
 
 Also: it's best to keep your loops short and sweet - don't put business logic in your initializer, but somewhere else where you've got some test coverage. As a rule of thumb, if you've got more than one line inside a loop block, then you should probably consider whether that code could be somewhere else.
 
