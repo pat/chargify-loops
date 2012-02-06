@@ -1,4 +1,4 @@
-Edge
+0.2.0 - February 6th 2012
 * Making sure all keys are strings (matching the payload hashes).
 
 0.1.0 - November 17th 2011
