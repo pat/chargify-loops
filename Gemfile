@@ -1,7 +1,5 @@
 source :rubygems
 
-gem 'combustion',
-  :git => 'git://github.com/freelancing-god/combustion.git',
-  :ref => 'cd3ccae'
+gem 'combustion', '0.5.0'
 
 gemspec

@@ -11,8 +11,11 @@ module Chargify
     end
 
     def self.loop!(event, &block)
-      loops[event] ||= []
-      loops[event]  << block
+      events = event.kind_of?(Array) ? event : [event]
+      events.each do |event|
+        loops[event] ||= []
+        loops[event]  << block
+      end
     end
 
     def self.shared_key
