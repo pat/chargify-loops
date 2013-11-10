@@ -32,5 +32,15 @@ describe Chargify::Loops do
 
       Chargify::Loops.loops[:test].length.should == 1
     end
+
+    it "appends loops for an array of events" do
+      Chargify::Loops.loop! [:test, :one, :two] do |payload|
+        #
+      end
+
+      Chargify::Loops.loops[:test].length.should == 1
+      Chargify::Loops.loops[:one].length.should == 1
+      Chargify::Loops.loops[:two].length.should == 1
+    end
   end
 end
