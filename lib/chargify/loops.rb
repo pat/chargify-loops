@@ -1,13 +1,17 @@
 module Chargify
   module Loops
     def self.delegate_hook(event, payload)
-      loops[event] && loops[event].each do |block|
+      loops[event].each do |block|
         block.call payload
+      end
+
+      loops[:all].each do |block|
+        block.call event, payload
       end
     end
 
     def self.loops
-      @loops ||= {}
+      @loops ||= Hash.new { |hash, key| hash[key] = [] }
     end
 
     def self.loop!(event, &block)

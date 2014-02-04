@@ -22,6 +22,15 @@ describe Chargify::Loops do
     it "does not complain if there's no loops for a given hook" do
       Chargify::Loops.delegate_hook :alpha, :foo
     end
+
+    it "calls :all loops for all hooks" do
+      Chargify::Loops.loops[:all] = [alpha_hook, beta_hook]
+
+      alpha_hook.should_receive(:call).with(:alpha, :foo)
+      beta_hook.should_receive(:call).with(:alpha, :foo)
+
+      Chargify::Loops.delegate_hook :alpha, :foo
+    end
   end
 
   describe '.loop!' do
