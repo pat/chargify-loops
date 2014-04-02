@@ -9,7 +9,7 @@ describe Chargify::HooksController do
     body      = params.to_query
     signature = Digest::MD5.hexdigest(Chargify::Loops.shared_key + body)
 
-    request.env['X-Chargify-Webhook-Signature'] = signature
+    request.headers['X-Chargify-Webhook-Signature'] = signature
 
     post action, params
   end
